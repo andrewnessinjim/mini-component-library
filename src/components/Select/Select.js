@@ -32,13 +32,18 @@ const SelectWrapper = styled.div`
 `;
 
 const SelectDisplayedValue = styled.p`
-  padding: 12px 24px 12px 16px;
+  padding: 12px 52px 12px 16px;
   display: inline-block;
 `;
 
-const IconWrapper = styled(Icon)`
-  display: inline-block;
-  padding-right: 32px;
+const IconWrapper = styled.div`
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  right: 10px;
+  width: var(--size);
+  height: var(--size);
 `
 
 const Select = ({ label, value, onChange, children }) => {
@@ -46,11 +51,13 @@ const displayedValue = getDisplayedValue(value, children);
 
   return (
       <SelectWrapper>
+        <SelectDisplayedValue>{displayedValue}</SelectDisplayedValue>
+        <IconWrapper style={{"--size": "24px"}}>
+          <Icon id="chevron-down" style={{"--stroke-width" : "2px", "--size": "24"}}/>
+        </IconWrapper>
         <StyledSelect value={value} onChange={onChange}>
           {children}
         </StyledSelect>
-        <SelectDisplayedValue>{displayedValue}</SelectDisplayedValue>
-        <IconWrapper id="chevron-down" style={{"--stroke-width" : "2px", "--size": "18px"}}/>
       </SelectWrapper>
   );
 };
