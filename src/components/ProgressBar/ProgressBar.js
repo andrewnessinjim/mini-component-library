@@ -6,26 +6,38 @@ import { COLORS } from '../../constants';
 import VisuallyHidden from '../VisuallyHidden';
 
 const sizes = {
-  small: "12px",
-  medium: "18px",
-  large: "24px"
+  height: {
+    small: "8px",
+    medium: "12px",
+    large: "24px"
+  },
+  borderRadius: {
+    small: "4px",
+    medium: "4px",
+    large: "8px"
+  }
 }
 const Backdrop = styled.div`
-  width: 250px;
-  height: ${p => sizes[p.size]};
-  border-radius: 4px;
+  height: ${p => sizes.height[p.size]};
+  border-radius: ${p => sizes.borderRadius[p.size]};
   box-shadow: inset 0px 2px 4px ${COLORS.transparentGray35};
-  padding: ${p => p.size === "large" && "3px"};
+  padding: ${p => p.size === "large" && "4px"};
+  background-color: ${COLORS.transparentGray15};
 `;
+
+function barRightBorderRadius() {
+  return p => (p.completedPercentage === 100 && p.borderRadius+"px") || 
+              (p.completedPercentage >= 99 && (p.borderRadius / 2)+"px");
+}
 
 const Bar = styled.div`
   background-color: ${COLORS.primary};
   width: ${p => p.completedPercentage+"%"};
   height: 100%;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border-top-right-radius: ${p => p.completedPercentage >= 99 && "4px"};
-  border-bottom-right-radius: ${p => p.completedPercentage >= 99 && "4px"};
+  border-top-left-radius: ${p => p.borderRadius+"px"};
+  border-bottom-left-radius: ${p => p.borderRadius+"px"};
+  border-top-right-radius: ${barRightBorderRadius};
+  border-bottom-right-radius: ${barRightBorderRadius};
   transition: 500ms width;
 `;
 
@@ -37,11 +49,14 @@ const ProgressBar = ({ value, size }) => {
           <Backdrop
             role="progressbar"
             aria-labelledby='loadinglabel'
-            aria-valuenow={value}
-            
+            aria-valuenow={value}  
+            aria-valuemin="0"
+            aria-valuemax="100"
             size={size}>
-              <Bar 
-                completedPercentage = {value}>
+              <Bar
+                size={size}
+                completedPercentage = {value}
+                borderRadius = {4}>
               </Bar>
           </Backdrop>
       </div>;
