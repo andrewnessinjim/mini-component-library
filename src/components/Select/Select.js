@@ -66,13 +66,3 @@ const displayedValue = getDisplayedValue(value, children);
 };
 
 export default Select;
-
-
-{/* return (
-    
-    <SelectWrapper>
-      
-      <SelectDisplayedValue>{displayedValue}</SelectDisplayedValue>
-      <IconWrapper id="chevron-down" style={{"--stroke-width" : "2px"}}/>
-    </SelectWrapper>
-  ); */}
