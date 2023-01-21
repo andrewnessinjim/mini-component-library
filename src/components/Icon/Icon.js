@@ -53,6 +53,8 @@ const Wrapper = styled.div`
   & > svg {
     display: block;
     stroke-width: var(--stroke-width);
+    width: 100%;
+    height: 100%;
   }
 `;
 
