@@ -5,40 +5,42 @@ import styled from 'styled-components';
 import { COLORS } from '../../constants';
 import VisuallyHidden from '../VisuallyHidden';
 
-const sizes = {
+const STYLES = {
   height: {
     small: "8px",
     medium: "12px",
-    large: "24px"
+    large: "16px"
   },
   borderRadius: {
     small: "4px",
     medium: "4px",
     large: "8px"
+  },
+  padding: {
+    small: "0px",
+    medium: "0px",
+    large: "4px"
   }
 }
 const Backdrop = styled.div`
-  height: ${p => sizes.height[p.size]};
-  border-radius: ${p => sizes.borderRadius[p.size]};
+  border-radius: var(--borderRadius);
   box-shadow: inset 0px 2px 4px ${COLORS.transparentGray35};
-  padding: ${p => p.size === "large" && "4px"};
+  padding: var(--padding);
   background-color: ${COLORS.transparentGray15};
 `;
 
-function barRightBorderRadius() {
-  return p => (p.completedPercentage === 100 && p.borderRadius+"px") || 
-              (p.completedPercentage >= 99 && (p.borderRadius / 2)+"px");
-}
-
 const Bar = styled.div`
   background-color: ${COLORS.primary};
-  width: ${p => p.completedPercentage+"%"};
-  height: 100%;
-  border-top-left-radius: ${p => p.borderRadius+"px"};
-  border-bottom-left-radius: ${p => p.borderRadius+"px"};
-  border-top-right-radius: ${barRightBorderRadius};
-  border-bottom-right-radius: ${barRightBorderRadius};
+  width: var(--width);
+  height: var(--height);
   transition: 500ms width;
+`;
+
+const BarWrapper = styled.div`
+  /* Trim off corners when progress bar is near-full. */
+  overflow: hidden;
+
+  border-radius: 4px;
 `;
 
 const ProgressBar = ({ value, size }) => {
@@ -52,12 +54,21 @@ const ProgressBar = ({ value, size }) => {
             aria-valuenow={value}  
             aria-valuemin="0"
             aria-valuemax="100"
-            size={size}>
-              <Bar
-                size={size}
-                completedPercentage = {value}
-                borderRadius = {4}>
-              </Bar>
+            size={size}
+            style={{
+              "--padding": STYLES.padding[size],
+              "--borderRadius": STYLES.borderRadius[size]
+            }}>
+              <BarWrapper>
+                <Bar
+                  size={size}
+                  style={{
+                    "--width": value+"%",
+                    "--height": STYLES.height[size]
+                  }}
+                  >
+                </Bar>
+              </BarWrapper>
           </Backdrop>
       </div>;
 };
