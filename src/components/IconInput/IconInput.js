@@ -12,21 +12,25 @@ const STYLES ={
     iconSize: "15px",
     inputLeftPadding: 5 + 10 + 10 + "px", //left-most padding + icon width + space between icon and input
     strokeWidth: "1px",
-    underlineSize: "1px"
+    underlineThickness: "1px"
   },
   large: {
     fontSize: (18/16)+"rem",
     iconSize: "24px",
     inputLeftPadding: 7 + 16 + 18 + "px",
     strokeWidth: "2px",
-    underlineSize: "2px"
+    underlineThickness: "2px"
   }
 }
 
 const Wrapper = styled.div`
-  border-bottom: var(--underline-size) solid ${COLORS.black};
+  border-bottom: var(--underline-thickness) solid ${COLORS.black};
   width: fit-content;
   position: relative;
+  color: ${COLORS.gray700};
+  &:hover {
+    color: ${COLORS.black};
+  }
 `;
 
 const IconWrapper = styled.div`
@@ -37,11 +41,6 @@ const IconWrapper = styled.div`
   left: 5px;
   margin: auto;
   height: var(--height);
-  color: ${COLORS.gray700};
-  pointer-events: none;
-  ${Wrapper}:hover & {
-      color: ${COLORS.black};
-    }
 `;
 
 const Input = styled.input`
@@ -51,13 +50,9 @@ const Input = styled.input`
   padding-top: 4px;
   padding-bottom: 4px;
   font-weight: 700;
-  color: ${COLORS.gray700};
+  color: inherit;
   outline-offset: 4px;
   font-size: var(--fontSize);
-
-  ${Wrapper}:hover & {
-    color: ${COLORS.black};
-  }
 
   &::placeholder {
     font-weight: initial;
@@ -70,31 +65,30 @@ const IconInput = ({
   icon,
   width = 250,
   size,
-  placeholder,
+  ...delegated
 }) => {
   const styles = STYLES[size];
   if(!styles) throw new Error(`Styles not found for size: ${size}`)
 
   return (
-    <Wrapper style={{"--underline-size" :styles.underlineSize}}>
-      <VisuallyHidden>
-        <label htmlFor='input'>{label}</label>
-      </VisuallyHidden>
-      <IconWrapper style={{"--height": styles.iconSize}}>
-        <Icon id={icon} style={{
-          "--size": styles.iconSize,
-          "--stroke-width": styles.strokeWidth
-          }}/>
-      </IconWrapper>
-      <Input
-        id='input'
-        style={{
-          "--width": width+"px",
-          "--fontSize": styles.fontSize,
-          "--inputLeftPadding": styles.inputLeftPadding
-        }}
-        type="text"
-        placeholder={placeholder}/>
+    <Wrapper style={{"--underline-thickness" :styles.underlineThickness}}>
+      <label>
+        <VisuallyHidden>{label}</VisuallyHidden>
+        <IconWrapper style={{"--height": styles.iconSize}}>
+          <Icon id={icon} style={{
+            "--size": styles.iconSize,
+            "--stroke-width": styles.strokeWidth
+            }}/>
+        </IconWrapper>
+        <Input
+          style={{
+            "--width": width+"px",
+            "--fontSize": styles.fontSize,
+            "--inputLeftPadding": styles.inputLeftPadding
+          }}
+          type="text"
+          {...delegated}/>
+      </label>
     </Wrapper>
   );
 };
